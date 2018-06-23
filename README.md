@@ -6,7 +6,7 @@ GraphQL Binding for Prisma services (GraphQL Database)
 
 ## Overview
 
-`prisma-binding` provides a convenience layer for building GraphQL servers on top of Prisma services. In short, it simplifies implementing your GraphQL resolvers by _delegating_ execution of queries (or mutations) to the API of the underlying Prisma database service.
+`remote-graphql-binding` provides a convenience layer for building GraphQL servers on top of Prisma services. In short, it simplifies implementing your GraphQL resolvers by _delegating_ execution of queries (or mutations) to the API of the underlying Prisma database service.
 
 Here is how it works:
 
@@ -21,9 +21,9 @@ Here is how it works:
 ## Install
 
 ```sh
-yarn add prisma-binding
+yarn add remote-graphql-binding
 # or
-npm install --save prisma-binding
+npm install --save remote-graphql-binding
 ```
 
 ## Example
@@ -146,7 +146,7 @@ prisma.request(query, variables)
 If you just want to forward a query to the exact same underlying prisma query, you can use `forwardTo`:
 
 ```js
-const {forwardTo} = require('prisma-binding')
+const {forwardTo} = require('remote-graphql-binding')
 
 const resolvers = {
   Query: {

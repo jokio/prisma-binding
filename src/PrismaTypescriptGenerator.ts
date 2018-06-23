@@ -55,7 +55,7 @@ ${this.renderTypes()}`
 import { GraphQLResolveInfo, GraphQLSchema } from 'graphql'
 import { IResolvers } from 'graphql-tools/dist/Interfaces'
 import { Options } from 'graphql-binding'
-import { makePrismaBindingClass, BasePrismaOptions } from 'prisma-binding'`
+import { makePrismaBindingClass, BasePrismaOptions } from 'remote-graphql-binding'`
   }
   renderExports() {
     return `export const Prisma = makePrismaBindingClass<BindingConstructor<Prisma>>({typeDefs})`

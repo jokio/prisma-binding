@@ -10,14 +10,14 @@ export function getExistsTypes(queryType: GraphQLObjectType) {
   return types
     .map(
       ({ type, where }) => `  ${type}: (where?: ${where}) => Promise<boolean>`,
-    )
+  )
     .join('\n')
 }
 
 export function getExistsFlowTypes(queryType: GraphQLObjectType) {
   const types = getTypesAndWhere(queryType)
   return types.map(
-    ({ type, where}) => `${type}(where?: ${where}): Promise<boolean>;`
+    ({ type, where }) => `${type}(where?: ${where}): Promise<boolean>;`
   )
     .join('\n')
 }
@@ -43,8 +43,11 @@ export function getTypesAndWhere(queryType: GraphQLObjectType) {
 }
 
 export function getWhere(field) {
-  return (field.args.find(a => a.name === 'where')!
-    .type as GraphQLInputObjectType).name
+  const arg = field.args.find(a => a.name === 'where')
+  if (!arg)
+    return null
+
+  return (arg!.type as GraphQLInputObjectType).name
 }
 
 export function getDeepListType(field) {

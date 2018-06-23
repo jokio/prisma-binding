@@ -1,6 +1,6 @@
 {
-  "name": "prisma-binding",
-  "version": "0.0.0-semantic-release",
+  "name": "remote-graphql-binding",
+  "version": "2.1.2",
   "main": "dist/index.js",
   "typings": "./dist/index.d.ts",
   "files": [
@@ -16,7 +16,7 @@
     "Tim Suchanek <suchanek@prisma.io>"
   ],
   "bin": {
-    "prisma-binding": "./dist/bin.js"
+    "remote-graphql-binding": "./dist/bin.js"
   },
   "license": "MIT",
   "bugs": {

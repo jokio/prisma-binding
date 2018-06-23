@@ -21,7 +21,7 @@ ${this.renderExports()}
   }
   renderImports() {
     return `\
-const { makePrismaBindingClass } = require('prisma-binding')`
+const { makePrismaBindingClass } = require('remote-graphql-binding')`
   }
   renderExports() {
     return `\
