@@ -44,9 +44,9 @@
   dependencies:
     arrify "^1.0.1"
 
-"@jokio/graphql-import@^0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@jokio/graphql-import/-/graphql-import-0.0.3.tgz#6127805fa74f474a34cf01dade15a51114c141d4"
+"@jokio/graphql-import@^0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@jokio/graphql-import/-/graphql-import-0.0.4.tgz#c695eabe322db951eb4de7c7360048db6bea6236"
   dependencies:
     lodash "^4.17.4"
 

@@ -91,7 +91,13 @@ async function run(argv) {
 
 function getSchemaFromInput(input) {
   if (input.endsWith('.graphql') || input.endsWith('.gql')) {
-    return buildSchema(importSchema(input, undefined, ['QueryType', 'MutationType', 'SubscriptionType']))
+
+    let schema = buildSchema(importSchema(input))
+    if (!schema.getQueryType()) {
+      schema = buildSchema(importSchema(input, undefined, ['QueryType', 'MutationType', 'SubscriptionType']))
+    }
+
+    return schema
   }
 
   if (input.endsWith('.js') || input.endsWith('.ts')) {
