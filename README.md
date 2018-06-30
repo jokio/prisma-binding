@@ -2,7 +2,6 @@
 
 [![npm version](https://badge.fury.io/js/remote-graphql-binding.svg)](https://badge.fury.io/js/remote-graphql-binding)
 
-GraphQL Binding for Prisma services (GraphQL Database)
 
 ## Overview
 
@@ -14,7 +13,7 @@ GraphQL Binding for Prisma services (GraphQL Database)
 graphql init
 ``` 
 2. Add generation script in package.json:
-```json
+```js
 {
   ...
   "scripts": {
@@ -41,10 +40,10 @@ npm install --save remote-graphql-binding
 ```
 
 ## Example
-folder structure (root elements):
+folder structure:
+- src/index.ts
 - .grpahqlconfig
 - .env
-- 
 
 .grpahqlconfig
 ```json
@@ -104,8 +103,8 @@ The `Options` type has the following fields:
 
 | Key | Required |  Type | Default | Note |
 | ---  | --- | --- | --- | --- |
-| `endpoint` | Yes | `string` |  - | The endpoint of your Prisma service |
-| `authorizationHeader` | No | `string` |  - | Authorization header for secured services |
+| `endpoint` | Yes | `string` | - | The endpoint of your Prisma service |
+| `authorizationHeader` | No | `string` | `null` | Authorization header for secured services |
 | `fragmentReplacements` | No | `FragmentReplacements` |  `null` | A list of GraphQL fragment definitions, specifying fields that are required for the resolver to function correctly |
 | `debug` | No | `boolean` |  `false` | Log all queries/mutations to the console |
 
