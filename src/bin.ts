@@ -4,11 +4,12 @@ import * as fs from 'fs'
 import * as yargs from 'yargs'
 import * as mkdirp from 'mkdirp'
 import * as path from 'path'
-import { PrismaGenerator } from './PrismaGenerator'
-import { PrismaTypescriptGenerator } from './PrismaTypescriptGenerator'
-import { PrismaFlowGenerator } from "./PrismaFlowGenerator";
+// import { PrismaGenerator } from './PrismaGenerator'
+// import { PrismaTypescriptGenerator } from './PrismaTypescriptGenerator'
+// import { PrismaFlowGenerator } from "./PrismaFlowGenerator";
 import { buildSchema, printSchema } from 'graphql'
 import { importSchema } from 'graphql-import'
+import { TypescriptGenerator, Generator } from 'graphql-binding';
 
 const argv = yargs
   .usage(`Usage: $0 -i [input] -g [generator] -b [outputBinding]`)
@@ -48,6 +49,7 @@ async function run(argv) {
     schema,
     inputSchemaPath: path.resolve(input),
     outputBindingPath: path.resolve(outputBinding),
+    isDefaultExport: false,
   }
 
   if (language === 'typescript') {
@@ -57,13 +59,13 @@ async function run(argv) {
 
   switch (language) {
     case 'typescript':
-      generatorInstance = new PrismaTypescriptGenerator(args);
+      generatorInstance = new TypescriptGenerator(args);
       break;
-    case 'flow':
-      generatorInstance = new PrismaFlowGenerator(args);
-      break;
+    // case 'flow':
+    //   generatorInstance = new PrismaFlowGenerator(args);
+    //   break;
     default:
-      generatorInstance = new PrismaGenerator(args)
+      generatorInstance = new Generator(args)
   }
 
   const code = generatorInstance.render()
