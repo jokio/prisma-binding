@@ -3,20 +3,22 @@ import { ApolloLink, Operation, split } from 'apollo-link'
 import { WebSocketLink } from 'apollo-link-ws'
 import { onError } from 'apollo-link-error'
 import * as ws from 'ws'
-import { HTTPLinkDataloader } from 'http-link-dataloader'
+import { HttpLink } from 'apollo-link-http'
+import fetch from 'node-fetch'
 
-export function makePrismaLink({
+export function makeLinkWithAuthorization({
   endpoint,
-  token,
+  authorizationHeader,
   debug,
 }: {
-  endpoint: string
-  token?: string
-  debug?: boolean
-}): ApolloLink {
-  const httpLink = new HTTPLinkDataloader({
+    endpoint: string
+    authorizationHeader?: string
+    debug?: boolean
+  }): ApolloLink {
+  const httpLink = new HttpLink({
     uri: endpoint,
-    headers: token ? { Authorization: `Bearer ${token}` } : {},
+    headers: authorizationHeader ? { Authorization: authorizationHeader } : {},
+    fetch,
   })
 
   // also works for https/wss
@@ -25,10 +27,10 @@ export function makePrismaLink({
     uri: wsEndpoint,
     options: {
       reconnect: true,
-      connectionParams: token
+      connectionParams: authorizationHeader
         ? {
-            Authorization: `Bearer ${token}`,
-          }
+          Authorization: authorizationHeader,
+        }
         : {},
       lazy: true,
       inactivityTimeout: 30000,
@@ -70,6 +72,7 @@ export function makePrismaLink({
     return ApolloLink.from([reportErrors, backendLink])
   }
 }
+
 
 function isSubscription(operation: Operation): boolean {
   const selectedOperation = getSelectedOperation(operation)

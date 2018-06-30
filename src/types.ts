@@ -12,7 +12,8 @@ export interface Exists {
 export interface BasePrismaOptions {
   fragmentReplacements?: FragmentReplacement[]
   endpoint?: string
-  secret?: string
+  // secret?: string
+  authorizationHeader?: string
   debug?: boolean
 }
 

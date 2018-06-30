@@ -1,5 +1,5 @@
 export { Prisma } from './Prisma'
-export { makePrismaLink } from './link'
+export { makeLinkWithAuthorization } from './link'
 export { BasePrismaOptions } from './types'
 export { extractFragmentReplacements, forwardTo } from 'graphql-binding'
 

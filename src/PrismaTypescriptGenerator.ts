@@ -3,7 +3,7 @@ import { printSchema } from 'graphql'
 import { getExistsTypes } from './utils'
 
 export class PrismaTypescriptGenerator extends TypescriptGenerator {
-  constructor(options) {
+  constructor(private options) {
     super(options)
   }
   render() {
@@ -18,7 +18,7 @@ export interface Subscription ${this.renderSubscriptions()}
 
 export interface Exists ${this.renderExists()}
 
-export interface Prisma {
+export interface BindingInstance {
   query: Query
   mutation: Mutation
   subscription: Subscription
@@ -58,7 +58,7 @@ import { Options } from 'graphql-binding'
 import { makePrismaBindingClass, BasePrismaOptions } from 'remote-graphql-binding'`
   }
   renderExports() {
-    return `export const Prisma = makePrismaBindingClass<BindingConstructor<Prisma>>({typeDefs})`
+    return `export const ${this.options.className} = makePrismaBindingClass<BindingConstructor<BindingInstance>>({typeDefs})`
   }
   renderTypedefs() {
     return (

@@ -1,13 +1,13 @@
 import { Binding } from 'graphql-binding'
 import { Exists, PrismaOptions } from './types'
-import { sign } from 'jsonwebtoken'
-import { makePrismaLink } from './link'
+import { makeLinkWithAuthorization } from './link'
 import { buildExistsInfo } from './info'
-import { SharedLink } from './SharedLink'
+// import { SharedLink } from './SharedLink'
 import { getTypesAndWhere } from './utils'
-import { getCachedTypeDefs, getCachedRemoteSchema } from './cache'
+import { getCachedTypeDefs } from './cache'
+import { makeRemoteExecutableSchema } from 'graphql-tools';
 
-const sharedLink = new SharedLink()
+// const sharedLink = new SharedLink()
 
 export class Prisma extends Binding {
   exists: Exists
@@ -15,7 +15,7 @@ export class Prisma extends Binding {
   constructor({
     typeDefs,
     endpoint,
-    secret,
+    authorizationHeader,
     fragmentReplacements,
     debug,
   }: PrismaOptions) {
@@ -41,19 +41,17 @@ export class Prisma extends Binding {
 
     debug = debug || false
 
-    const token = secret ? sign({}, secret!) : undefined
-    const link = makePrismaLink({ endpoint: endpoint!, token, debug })
+    // const token = secret ? sign({}, secret!) : undefined
+    const link = makeLinkWithAuthorization({ endpoint: endpoint!, authorizationHeader, debug })
 
-    const remoteSchema = getCachedRemoteSchema(typeDefs, sharedLink)
-
-    const before = () => {
-      sharedLink.setInnerLink(link)
-    }
+    const remoteSchema = makeRemoteExecutableSchema({
+      link: link as any,
+      schema: typeDefs,
+    })
 
     super({
       schema: remoteSchema,
       fragmentReplacements,
-      before,
     })
 
     this.exists = this.buildExists()

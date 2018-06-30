@@ -4,15 +4,16 @@ import * as fs from 'fs'
 import * as yargs from 'yargs'
 import * as mkdirp from 'mkdirp'
 import * as path from 'path'
-// import { PrismaGenerator } from './PrismaGenerator'
-// import { PrismaTypescriptGenerator } from './PrismaTypescriptGenerator'
-// import { PrismaFlowGenerator } from "./PrismaFlowGenerator";
+import { PrismaGenerator } from './PrismaGenerator'
+import { PrismaTypescriptGenerator } from './PrismaTypescriptGenerator'
+import { PrismaFlowGenerator } from "./PrismaFlowGenerator";
 import { buildSchema, printSchema } from 'graphql'
-import { importSchema } from 'graphql-import'
-import { TypescriptGenerator, Generator } from 'graphql-binding';
+import { importSchema } from '@jokio/graphql-import'
+
+const defaultGeneratedClassName = 'Binding'
 
 const argv = yargs
-  .usage(`Usage: $0 -i [input] -g [generator] -b [outputBinding]`)
+  .usage(`Usage: $0 -i [input] -g [generator] -b [outputBinding] -c [binding]`)
   .options({
     input: {
       alias: 'i',
@@ -31,13 +32,19 @@ const argv = yargs
       describe: 'Output binding. Example: binding.ts',
       type: 'string',
     },
+    className: {
+      alias: 'c',
+      describe: 'Generated class name',
+      type: 'string',
+      default: defaultGeneratedClassName
+    },
     outputTypedefs: {
       alias: 't',
       describe: 'Output type defs. Example: typeDefs.graphql',
       type: 'string',
     },
   })
-  .demandOption(['i', 'l', 'b']).argv
+  .demandOption(['i', 'l', 'b', 'c']).argv
 
 run(argv).catch(e => console.error(e))
 
@@ -50,6 +57,7 @@ async function run(argv) {
     inputSchemaPath: path.resolve(input),
     outputBindingPath: path.resolve(outputBinding),
     isDefaultExport: false,
+    className: argv.c || defaultGeneratedClassName
   }
 
   if (language === 'typescript') {
@@ -59,13 +67,13 @@ async function run(argv) {
 
   switch (language) {
     case 'typescript':
-      generatorInstance = new TypescriptGenerator(args);
+      generatorInstance = new PrismaTypescriptGenerator(args);
       break;
-    // case 'flow':
-    //   generatorInstance = new PrismaFlowGenerator(args);
-    //   break;
+    case 'flow':
+      generatorInstance = new PrismaFlowGenerator(args);
+      break;
     default:
-      generatorInstance = new Generator(args)
+      generatorInstance = new PrismaGenerator(args)
   }
 
   const code = generatorInstance.render()
@@ -83,7 +91,7 @@ async function run(argv) {
 
 function getSchemaFromInput(input) {
   if (input.endsWith('.graphql') || input.endsWith('.gql')) {
-    return buildSchema(importSchema(input))
+    return buildSchema(importSchema(input, undefined, ['QueryType', 'MutationType', 'SubscriptionType']))
   }
 
   if (input.endsWith('.js') || input.endsWith('.ts')) {
