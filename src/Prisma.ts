@@ -18,6 +18,7 @@ export class Prisma extends Binding {
     authorizationHeader,
     fragmentReplacements,
     debug,
+    link,
   }: PrismaOptions) {
     if (!typeDefs) {
       throw new Error('No `typeDefs` provided when calling `new Prisma()`')
@@ -42,10 +43,10 @@ export class Prisma extends Binding {
     debug = debug || false
 
     // const token = secret ? sign({}, secret!) : undefined
-    const link = makeLinkWithAuthorization({ endpoint: endpoint!, authorizationHeader, debug })
+    link = link || makeLinkWithAuthorization({ endpoint: endpoint!, authorizationHeader, debug })
 
     const remoteSchema = makeRemoteExecutableSchema({
-      link: link as any,
+      link: <any>link,
       schema: typeDefs,
     })
 
